@@ -13,7 +13,7 @@ Protect your harvest with instant, high-precision plant disease diagnosis powere
 
 [🌿 Scan Crop Now](#)  [Learn More](#)
 
-![Smart Crop Scan](static/images/home.jpg)
+![Smart Crop Scan](static/images/home.png)
 
 ---
 
@@ -180,7 +180,7 @@ Below is a visual representation and structured summary of your personalized das
 
 ## 🖥️ Dashboard Overview
 
-![User Dashboard Interface](static/images/user.png)
+![User Dashboard Interface](static/images/userPanel.png)
 
 
 ![Farm Vision AI Dashboard Interface](static/images/AIPredict.png)
