@@ -70,7 +70,7 @@ farmvision-ai/
 ---
 
 ## 🗄️ Database Schema Overview
-Plaintext
+```markdown
 +-------------------+       +-----------------------+       +------------------------+
 |       User        |       |      Prediction       |       |     ContactMessage     |
 +-------------------+       +-----------------------+       +------------------------+
@@ -81,10 +81,13 @@ Plaintext
 | role (String)     |       | confidence (Float)    |       | created_at (DateTime)  |
 +-------------------+       | created_at (DateTime) |       +------------------------+
                             +-----------------------+
+
+```
+
 ⚡ Getting Started
 1. Clone the Repository
 Bash
-git clone [https://github.com/your-username/farmvision-ai.git](https://github.com/your-username/farmvision-ai.git)
+git clone [https://github.com/your-username/FarmVisionAI.git](https://github.com/your-username/farmvision-ai.git)
 cd farmvision-ai
 2. Create & Activate Virtual Environment
 Bash
@@ -105,9 +108,6 @@ Bash
 python app.py
 Open your browser and navigate to http://127.0.0.1:5000.
 
-Providing a raw SQL script (a `.sql` file) is another great approach! It gives developers and database administrators full visibility into the exact structure of your database.
-
-Here is how you can set up a SQL script for **FarmVision AI**, along with how users can execute it.
 
 ---
 
@@ -166,11 +166,11 @@ VALUES (
 
 ## 🛠️ 2. How Users Can Run the SQL File
 
-There are **two easy ways** for anyone who clones your project to execute this SQL script:
+There are **two easy ways** for anyone who clones project to execute this SQL script:
 
 ### Option A: Using SQLite Command Line (Simplest)
 
-In the terminal, they can run a single command to create the database from `schema.sql`:
+In the terminal, you can run a single command to create the database from `schema.sql`:
 
 ```bash
 # Creates farmvision.db and executes all CREATE TABLE commands
