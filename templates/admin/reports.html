@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Report Generation | Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto space-y-6 py-6 px-4">
+    
+    <!-- Header Section -->
+    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">System Reports & Export</h1>
+            <p class="text-gray-500 text-sm">Generate and download CSV reports for users, predictions, and contacts.</p>
+        </div>
+        <button onclick="window.print()" class="px-4 py-2 bg-gray-800 hover:bg-gray-900 text-white rounded-lg text-sm font-medium transition flex items-center gap-2">
+            <span>🖨️</span> Print Summary
+        </button>
+    </div>
+
+    <!-- Export Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Users Export Card -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between space-y-4">
+            <div>
+                <div class="flex items-center justify-between">
+                    <span class="text-3xl">👥</span>
+                    <span class="text-xs font-semibold bg-blue-100 text-blue-800 px-2.5 py-1 rounded-full">{{ total_users }} Total</span>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mt-3">Users Report</h3>
+                <p class="text-xs text-gray-500 mt-1">Export complete list of registered user accounts, emails, and roles.</p>
+            </div>
+            <a href="{{ url_for('admin.export_report', report_type='users') }}" class="w-full text-center px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm transition block">
+                📥 Download Users CSV
+            </a>
+        </div>
+
+        <!-- Predictions Export Card -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between space-y-4">
+            <div>
+                <div class="flex items-center justify-between">
+                    <span class="text-3xl">🌿</span>
+                    <span class="text-xs font-semibold bg-emerald-100 text-emerald-800 px-2.5 py-1 rounded-full">{{ total_predictions }} Total</span>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mt-3">Predictions Report</h3>
+                <p class="text-xs text-gray-500 mt-1">Export log of all AI disease predictions, confidence scores, and timestamps.</p>
+            </div>
+            <a href="{{ url_for('admin.export_report', report_type='predictions') }}" class="w-full text-center px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-medium rounded-lg text-sm transition block">
+                📥 Download Predictions CSV
+            </a>
+        </div>
+
+        <!-- Contact Messages Export Card -->
+        <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between space-y-4">
+            <div>
+                <div class="flex items-center justify-between">
+                    <span class="text-3xl">📩</span>
+                    <span class="text-xs font-semibold bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full">{{ total_messages }} Total</span>
+                </div>
+                <h3 class="text-lg font-bold text-gray-800 mt-3">Contact Inquiries Report</h3>
+                <p class="text-xs text-gray-500 mt-1">Export full history of incoming support messages and feedback submissions.</p>
+            </div>
+            <a href="{{ url_for('admin.export_report', report_type='contacts') }}" class="w-full text-center px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-medium rounded-lg text-sm transition block">
+                📥 Download Contacts CSV
+            </a>
+        </div>
+
+    </div>
+
+    <!-- Recent Predictions Summary Preview -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-5 border-b border-gray-100 bg-gray-50/50">
+            <h2 class="font-bold text-gray-800 flex items-center gap-2">
+                <span>📊</span> Recent Activity Overview (Last 10 Scans)
+            </h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="text-xs text-gray-400 uppercase border-b border-gray-100 bg-gray-50/30">
+                        <th class="p-4 pl-6">ID</th>
+                        <th class="p-4">Filename</th>
+                        <th class="p-4">Prediction</th>
+                        <th class="p-4">Confidence</th>
+                        <th class="p-4 pr-6">Date</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+                    {% for item in recent_predictions %}
+                    <tr class="hover:bg-gray-50/50 transition">
+                        <td class="p-4 pl-6 font-mono text-xs text-gray-400">#{{ item.id }}</td>
+                        <td class="p-4 text-xs font-mono text-gray-500">{{ item.filename }}</td>
+                        <td class="p-4 font-semibold text-green-700">{{ item.result }}</td>
+                        <td class="p-4">
+                            <span class="px-2 py-0.5 bg-green-100 text-green-800 text-xs font-bold rounded">
+                                {{ item.confidence }}%
+                            </span>
+                        </td>
+                        <td class="p-4 pr-6 text-xs text-gray-500">
+                            {{ item.created_at.strftime('%Y-%m-%d %H:%M') if item.created_at else 'N/A' }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="p-6 text-center text-gray-400">No predictions logged yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

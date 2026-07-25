@@ -1,0 +1,24 @@
+*.keras
+*.h5
+models/
+checkpoints/
+
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Database & Storage
+instance/
+*.db
+*.sqlite3
+static/uploads/*
+!static/uploads/.gitkeep
+
+# Environment Variables & Secrets
+.env
+.DS_Store

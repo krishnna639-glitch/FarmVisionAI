@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction History{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto mt-10 px-4">
+    <h2 class="text-3xl font-bold text-green-700 mb-6">📜 Your Prediction History</h2>
+
+    {% if predictions %}
+    <div class="bg-white shadow-md rounded-lg overflow-hidden border">
+        <table class="min-w-full leading-normal">
+            <thead>
+                <tr class="bg-gray-100 text-left text-gray-600 uppercase text-sm font-semibold border-b">
+                    <th class="py-3 px-6">ID</th>
+                    <th class="py-3 px-6">Image / File</th>
+                    <th class="py-3 px-6">Prediction Result</th>
+                    <th class="py-3 px-6">Confidence</th>
+                    <th class="py-3 px-6">Date & Time</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700 text-sm">
+                {% for item in predictions %}
+                <tr class="border-b hover:bg-gray-50 transition">
+                    <td class="py-4 px-6 font-bold">#{{ item.id }}</td>
+                    <td class="py-4 px-6">
+                        <img src="{{ url_for('static', filename='uploads/' + item.filename) }}" alt="Leaf" class="w-12 h-12 object-cover rounded shadow">
+                    </td>
+                    <td class="py-4 px-6 font-semibold text-green-700">{{ item.result }}</td>
+                    <td class="py-4 px-6">{{ item.confidence }}%</td>
+                    <td class="py-4 px-6 text-gray-500">{{ item.created_at.strftime('%Y-%m-%d %H:%M') if item.created_at else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+        <p class="text-yellow-700">No past predictions found. Try uploading a leaf image from your dashboard!</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

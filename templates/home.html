@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+
+{% block title %}Home | AgroVision AI{% endblock %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+<section class="relative bg-gradient-to-br from-green-800 via-green-700 to-emerald-600 text-white overflow-hidden">
+    <!-- Subtle Background Glow -->
+    <div class="absolute -top-24 -left-24 w-96 h-96 bg-green-500 opacity-20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-24 -right-24 w-96 h-96 bg-emerald-400 opacity-20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-12 items-center relative z-10">
+        <div>
+            <span class="inline-block px-4 py-1.5 bg-green-900/50 backdrop-blur-md text-green-200 border border-green-500/30 rounded-full text-xs font-semibold uppercase tracking-wider mb-6">
+                🚀 Next-Gen Smart Farming
+            </span>
+            <h1 class="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight">
+                AI Powered Crop <span class="text-green-300">Disease Detection</span>
+            </h1>
+            <p class="mt-6 text-lg text-green-100/90 leading-relaxed max-w-xl">
+                Protect your harvest with instant, high-precision plant disease diagnosis powered by advanced deep learning models.
+            </p>
+
+            <div class="mt-8 flex flex-wrap gap-4">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('auth.predict') }}" class="bg-white text-green-800 px-8 py-4 rounded-xl font-bold hover:bg-green-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
+                    <span>🌿</span> Scan Crop Now
+                </a>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}" class="bg-white text-green-800 px-8 py-4 rounded-xl font-bold hover:bg-green-50 transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center gap-2">
+                    <span>⚡</span> Start Free Prediction
+                </a>
+                {% endif %}
+
+                <a href="#about" class="border border-white/40 bg-white/10 backdrop-blur-sm px-8 py-4 rounded-xl font-semibold hover:bg-white/20 transition-all duration-300">
+                    Learn More
+                </a>
+            </div>
+        </div>
+
+        <div class="relative group">
+            <div class="absolute -inset-1 bg-gradient-to-r from-green-400 to-emerald-300 rounded-2xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+            <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=900" alt="Smart Crop Scan" class="relative rounded-2xl shadow-2xl object-cover w-full h-[400px]">
+        </div>
+    </div>
+</section>
+
+<!-- ================= STATS COUNTER ================= -->
+<section class="bg-green-900 text-white py-10 border-t border-green-800">
+    <div class="max-w-6xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+            <h3 class="text-4xl font-extrabold text-green-300">96.4%</h3>
+            <p class="text-xs uppercase tracking-wider text-green-200/80 mt-1">Accuracy Rate</p>
+        </div>
+        <div>
+            <h3 class="text-4xl font-extrabold text-green-300">6+</h3>
+            <p class="text-xs uppercase tracking-wider text-green-200/80 mt-1">Crop Categories</p>
+        </div>
+        <div>
+            <h3 class="text-4xl font-extrabold text-green-300">Instant</h3>
+            <p class="text-xs uppercase tracking-wider text-green-200/80 mt-1">Diagnosis Speed</p>
+        </div>
+        <div>
+            <h3 class="text-4xl font-extrabold text-green-300">24/7</h3>
+            <p class="text-xs uppercase tracking-wider text-green-200/80 mt-1">Cloud Access</p>
+        </div>
+    </div>
+</section>
+
+<!-- ================= INTERACTIVE IMAGE SLIDER ================= -->
+<section class="py-20 bg-slate-50">
+    <div class="max-w-5xl mx-auto px-6">
+        <div class="text-center mb-10">
+            <h2 class="text-3xl font-bold text-slate-800">Smart Farming Gallery</h2>
+            <p class="text-slate-500 text-sm mt-2">Explore AI in action across real fields and crops.</p>
+        </div>
+
+        <div class="relative rounded-2xl overflow-hidden shadow-2xl group bg-slate-900">
+            <img id="slider" src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200" class="w-full h-[450px] object-cover transition-all duration-700">
+
+            <!-- Controls -->
+            <button onclick="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition duration-300">
+                ❮
+            </button>
+            <button onclick="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/70 text-white p-3 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition duration-300">
+                ❯
+            </button>
+
+            <!-- Dots Indicator -->
+            <div id="dotContainer" class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= WHY PLANTS ================= -->
+<section id="about" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <h2 class="text-3xl font-bold text-gray-800">Why Crop Health Matters</h2>
+            <p class="text-gray-500 text-sm mt-2">Early detection prevents catastrophic harvest losses and supports global food security.</p>
+        </div>
+
+        <div class="grid md:grid-cols-4 gap-8">
+            <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-green-300 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition duration-300">🌍</div>
+                <h3 class="text-xl font-bold text-gray-800">Oxygen & Ecosystem</h3>
+                <p class="mt-3 text-sm text-gray-600 leading-relaxed">Plants generate essential oxygen and preserve topsoil health across farming ecosystems.</p>
+            </div>
+
+            <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-green-300 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition duration-300">🍅</div>
+                <h3 class="text-xl font-bold text-gray-800">Food Security</h3>
+                <p class="mt-3 text-sm text-gray-600 leading-relaxed">Early diagnosis protects high-yield crops against destructive bacterial and viral blights.</p>
+            </div>
+
+            <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-green-300 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition duration-300">💰</div>
+                <h3 class="text-xl font-bold text-gray-800">Economic Value</h3>
+                <p class="mt-3 text-sm text-gray-600 leading-relaxed">Reduces chemical overuse by providing targeted treatments early in the infection cycle.</p>
+            </div>
+
+            <div class="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-green-300 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                <div class="text-4xl mb-4 group-hover:scale-110 transition duration-300">🌱</div>
+                <h3 class="text-xl font-bold text-gray-800">Sustainable Growth</h3>
+                <p class="mt-3 text-sm text-gray-600 leading-relaxed">Promotes organic farming practices through intelligent nutrient monitoring.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= COMMON DISEASES ================= -->
+<section class="py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Supported Crop Diagnoses</h2>
+
+        <div class="grid md:grid-cols-4 gap-8">
+            {% set diseases = [
+                {'name': 'Potato Early Blight', 'desc': 'Fungal disease causing target-like concentric rings on older leaves.', 'icon': '🥔'},
+                {'name': 'Tomato Yellow Leaf Curl', 'desc': 'Viral disease transmitted by whiteflies leading to stunted growth.', 'icon': '🍅'},
+                {'name': 'Late Blight', 'desc': 'Rapidly spreading water-soaked lesions affecting leaves and stems.', 'icon': '🌿'},
+                {'name': 'Mosaic Virus', 'desc': 'Causes mottled light and dark green patterns across foliage.', 'icon': '🍃'}
+            ] %}
+
+            {% for item in diseases %}
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col justify-between">
+                <div class="p-6">
+                    <div class="text-4xl mb-3">{{ item.icon }}</div>
+                    <h3 class="text-lg font-bold text-gray-800">{{ item.name }}</h3>
+                    <p class="mt-2 text-xs text-gray-500 leading-relaxed">{{ item.desc }}</p>
+                </div>
+                <div class="p-6 pt-0">
+                    <button onclick="openDiseaseModal('{{ item.name }}', '{{ item.desc }}')" class="w-full bg-green-50 hover:bg-green-100 text-green-800 text-xs font-semibold py-2.5 rounded-lg transition">
+                        View Symptoms & Details
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- ================= INTERACTIVE FARMING TIPS ================= -->
+<section class="py-20 bg-white">
+    <div class="max-w-5xl mx-auto px-6">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Smart Farming Best Practices</h2>
+
+        <!-- Interactive Tabs -->
+        <div class="flex justify-center gap-3 mb-8">
+            <button onclick="filterTips('all')" class="tip-btn active-tip border px-4 py-2 rounded-lg text-xs font-semibold">All Tips</button>
+            <button onclick="filterTips('water')" class="tip-btn border px-4 py-2 rounded-lg text-xs font-semibold">Irrigation</button>
+            <button onclick="filterTips('soil')" class="tip-btn border px-4 py-2 rounded-lg text-xs font-semibold">Soil & Nutrients</button>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6" id="tipsGrid">
+            <div class="tip-card water bg-slate-50 p-6 rounded-xl border border-slate-100 flex items-start gap-4">
+                <span class="text-2xl">💧</span>
+                <div>
+                    <h4 class="font-bold text-sm text-gray-800">Morning Watering</h4>
+                    <p class="text-xs text-gray-500 mt-1">Water crops early in the morning to minimize leaf dampness overnight and reduce fungal growth.</p>
+                </div>
+            </div>
+
+            <div class="tip-card soil bg-slate-50 p-6 rounded-xl border border-slate-100 flex items-start gap-4">
+                <span class="text-2xl">🧪</span>
+                <div>
+                    <h4 class="font-bold text-sm text-gray-800">Nutrient Rotation</h4>
+                    <p class="text-xs text-gray-500 mt-1">Balance nitrogen and potassium inputs to protect plants against blight susceptibility.</p>
+                </div>
+            </div>
+
+            <div class="tip-card water bg-slate-50 p-6 rounded-xl border border-slate-100 flex items-start gap-4">
+                <span class="text-2xl">🌿</span>
+                <div>
+                    <h4 class="font-bold text-sm text-gray-800">Prune Infected Foliage</h4>
+                    <p class="text-xs text-gray-500 mt-1">Isolate and prune spotted leaves immediately to arrest spore transmission.</p>
+                </div>
+            </div>
+
+            <div class="tip-card soil bg-slate-50 p-6 rounded-xl border border-slate-100 flex items-start gap-4">
+                <span class="text-2xl">🌾</span>
+                <div>
+                    <h4 class="font-bold text-sm text-gray-800">Crop Rotation</h4>
+                    <p class="text-xs text-gray-500 mt-1">Rotate nightshade crops seasonally to prevent disease buildup in soil.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ================= DISEASE MODAL ================= -->
+<div id="diseaseModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg">✕</button>
+        <h3 id="modalTitle" class="text-xl font-bold text-gray-800 mb-2"></h3>
+        <p id="modalDesc" class="text-sm text-gray-600 mb-6"></p>
+        <div class="bg-green-50 p-4 rounded-xl text-xs text-green-800 mb-6">
+            <strong>Recommended Action:</strong> Scan leaf sample with AgroVision AI for personalized treatment advisory.
+        </div>
+        <button onclick="closeModal()" class="w-full bg-green-700 text-white font-medium py-2.5 rounded-lg text-sm hover:bg-green-800 transition">
+            Close
+        </button>
+    </div>
+</div>
+
+<!-- ================= SLIDER & INTERACTION SCRIPT ================= -->
+<script>
+    // Image Carousel Logic
+    const images = [
+        "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=1200",
+        "https://images.unsplash.com/photo-1501004318641-b39e6451bec6?w=1200",
+        "https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=1200"
+    ];
+    let currentIndex = 0;
+    const sliderImg = document.getElementById("slider");
+    const dotContainer = document.getElementById("dotContainer");
+
+    // Build Dots
+    images.forEach((_, i) => {
+        const dot = document.createElement("button");
+        dot.className = `w-3 h-3 rounded-full transition-all ${i === 0 ? 'bg-white w-6' : 'bg-white/50'}`;
+        dot.onclick = () => setSlide(i);
+        dotContainer.appendChild(dot);
+    });
+
+    function updateSlider() {
+        sliderImg.src = images[currentIndex];
+        Array.from(dotContainer.children).forEach((dot, i) => {
+            dot.className = `w-3 h-3 rounded-full transition-all ${i === currentIndex ? 'bg-white w-6' : 'bg-white/50'}`;
+        });
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % images.length;
+        updateSlider();
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        updateSlider();
+    }
+
+    function setSlide(i) {
+        currentIndex = i;
+        updateSlider();
+    }
+
+    // Auto-advance slider
+    setInterval(nextSlide, 4000);
+
+    // Tips Filter Handler
+    function filterTips(category) {
+        const cards = document.querySelectorAll('.tip-card');
+        cards.forEach(card => {
+            if (category === 'all' || card.classList.contains(category)) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    // Modal Handlers
+    function openDiseaseModal(name, desc) {
+        document.getElementById('modalTitle').innerText = name;
+        document.getElementById('modalDesc').innerText = desc;
+        document.getElementById('diseaseModal').classList.remove('hidden');
+        document.getElementById('diseaseModal').classList.add('flex');
+    }
+
+    function closeModal() {
+        document.getElementById('diseaseModal').classList.add('hidden');
+        document.getElementById('diseaseModal').classList.remove('flex');
+    }
+</script>
+
+{% endblock %}

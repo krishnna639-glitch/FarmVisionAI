@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}AI Prediction{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto mt-10 p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-3xl font-bold text-green-700 mb-6 text-center">🤖 AI Upload & Prediction</h2>
+
+    <!-- Upload Form -->
+    <form method="POST" enctype="multipart/form-data" class="mb-8">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-6">
+            {{ form.file.label(class="block text-gray-700 font-bold mb-2") }}
+            {{ form.file(class="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600") }}
+            {% for error in form.file.errors %}
+                <p class="text-red-500 text-sm mt-1">{{ error }}</p>
+            {% endfor %}
+        </div>
+
+        {{ form.submit(class="w-full bg-green-700 hover:bg-green-800 text-white font-bold py-3 rounded-lg cursor-pointer transition") }}
+    </form>
+
+    <!-- Prediction Output Card -->
+    {% if result %}
+    <div class="bg-gray-50 border-l-4 border-green-600 p-6 rounded-lg shadow-inner">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">📊 Prediction Result</h3>
+        <p class="text-gray-700"><strong>Uploaded File:</strong> {{ result.filename }}</p>
+        <p class="text-gray-700 mt-1"><strong>Predicted Result:</strong> <span class="text-green-700 font-bold text-lg">{{ result.label }}</span></p>
+        <p class="text-gray-700 mt-1"><strong>Confidence Score:</strong> {{ result.confidence }}%</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Contact Management | Admin{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto space-y-6 py-6 px-4">
+    
+    <!-- Header Section & Search -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-800">Contact Management</h1>
+            <p class="text-gray-500 text-sm">Review and manage user feedback and contact form submissions.</p>
+        </div>
+        
+        <!-- Search Form -->
+        <form method="GET" action="{{ url_for('admin.contacts') }}" class="flex gap-2 w-full md:w-auto">
+            <input 
+                type="text" 
+                name="search" 
+                value="{{ search }}" 
+                placeholder="Search name, email, or message..." 
+                class="px-4 py-2 border rounded-lg text-sm focus:ring-2 focus:ring-green-500 outline-none w-full md:w-64"
+            >
+            <button type="submit" class="px-4 py-2 bg-green-700 hover:bg-green-800 text-white rounded-lg text-sm font-medium transition">
+                Search
+            </button>
+            {% if search %}
+            <a href="{{ url_for('admin.contacts') }}" class="px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-600 rounded-lg text-sm flex items-center">
+                Clear
+            </a>
+            {% endif %}
+        </form>
+    </div>
+
+    <!-- Flash Alerts -->
+    {% with flash_messages = get_flashed_messages(with_categories=true) %}
+        {% if flash_messages %}
+            {% for category, message in flash_messages %}
+                <div class="p-4 rounded-lg text-white bg-green-600 text-sm">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Contact Messages Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="text-xs text-gray-400 uppercase border-b border-gray-100 bg-gray-50/50">
+                        <th class="p-4 pl-6">ID</th>
+                        <th class="p-4">Sender</th>
+                        <th class="p-4">Message</th>
+                        <th class="p-4">Date</th>
+                        <th class="p-4 pr-6 text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100 text-sm text-gray-700">
+                    {% for msg in messages %}
+                    <tr class="hover:bg-gray-50/50 transition">
+                        <td class="p-4 pl-6 font-mono text-xs text-gray-400">#{{ msg.id }}</td>
+                        <td class="p-4">
+                            <div class="font-semibold text-gray-800">{{ msg.name }}</div>
+                            <a href="mailto:{{ msg.email }}" class="text-xs text-blue-600 hover:underline">{{ msg.email }}</a>
+                        </td>
+                        <td class="p-4 text-gray-600 max-w-md">
+                            <p class="whitespace-normal break-words">{{ msg.message }}</p>
+                        </td>
+                        <td class="p-4 text-xs text-gray-500 whitespace-nowrap">
+                            {{ msg.created_at.strftime('%b %d, %Y %H:%M') if msg.created_at else 'N/A' }}
+                        </td>
+                        <td class="p-4 pr-6 text-right whitespace-nowrap">
+                            <a href="mailto:{{ msg.email }}?subject=Re: AgroVision Inquiry" class="text-blue-600 hover:text-blue-800 text-xs font-semibold px-2 py-1 rounded bg-blue-50 hover:bg-blue-100 transition mr-1 inline-block">
+                                Reply
+                            </a>
+                            <form method="POST" action="{{ url_for('admin.delete_contact', msg_id=msg.id) }}" onsubmit="return confirm('Delete this message permanently?');" class="inline">
+                                <button type="submit" class="text-red-600 hover:text-red-800 text-xs font-semibold px-2 py-1 rounded bg-red-50 hover:bg-red-100 transition">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="p-6 text-center text-gray-400">No contact messages found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
