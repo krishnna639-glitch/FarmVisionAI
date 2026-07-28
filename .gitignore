@@ -1,4 +1,4 @@
-*.keras
+
 *.h5
 models/
 checkpoints/
