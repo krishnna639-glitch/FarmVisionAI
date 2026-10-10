@@ -53,17 +53,23 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+        # 1. Check if the email exists in the database
+        if not user:
+            flash("This email is not registered. Please sign up first.", "info")
+            return redirect(url_for("auth.register")) # Make sure "auth.register" matches your register route name
+            
+        # 2. If email exists, check if the password is correct
+        if bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember.data)
             flash("Welcome back!", "success")
             
             next_page = request.args.get("next")
             return redirect(next_page) if next_page else redirect(url_for("auth.dashboard"))
         else:
-            flash("Login failed. Please check your email and password.", "danger")
+            # 3. Email is correct, but password failed
+            flash("Incorrect password. Please try again.", "danger")
 
     return render_template("auth/login.html", form=form)
-
 
 # --- LOGOUT ROUTE ---
 @auth.route("/logout")
