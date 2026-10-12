@@ -83,7 +83,7 @@ def _normalize(value):
     return "".join(character.lower() for character in value if character.isalnum())
 
 
-def _resolve_disease(value):
+def resolve_disease(value):
     normalized_value = _normalize(value)
     for disease in DISEASE_GUIDANCE:
         if normalized_value == _normalize(disease):
@@ -97,7 +97,7 @@ def _resolve_disease(value):
 
 
 def reply_to_disease_question(selected_disease, message):
-    disease = _resolve_disease(selected_disease)
+    disease = resolve_disease(selected_disease)
     if disease is None:
         normalized_message = _normalize(message)
         matches = [

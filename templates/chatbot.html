@@ -21,12 +21,12 @@
             <label for="disease" class="block text-sm font-semibold text-gray-700 mb-2">Detected condition</label>
             <select id="disease" class="w-full rounded-lg border border-gray-300 p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-green-600">
                 <option value="">Choose a condition</option>
-                <option value="Potato___Early_blight">Potato - Early blight</option>
-                <option value="Potato___healthy">Potato - Healthy</option>
-                <option value="Potato___Late_blight">Potato - Late blight</option>
-                <option value="Tomato__Target_Spot">Tomato - Target spot</option>
-                <option value="Tomato__Tomato_mosaic_virus">Tomato - Mosaic virus</option>
-                <option value="Tomato_Tomato_YellowLeaf_Curl_Virus">Tomato - Yellow leaf curl virus</option>
+                <option value="Potato___Early_blight" {% if selected_disease == "Potato___Early_blight" %}selected{% endif %}>Potato - Early blight</option>
+                <option value="Potato___healthy" {% if selected_disease == "Potato___healthy" %}selected{% endif %}>Potato - Healthy</option>
+                <option value="Potato___Late_blight" {% if selected_disease == "Potato___Late_blight" %}selected{% endif %}>Potato - Late blight</option>
+                <option value="Tomato__Target_Spot" {% if selected_disease == "Tomato__Target_Spot" %}selected{% endif %}>Tomato - Target spot</option>
+                <option value="Tomato__Tomato_mosaic_virus" {% if selected_disease == "Tomato__Tomato_mosaic_virus" %}selected{% endif %}>Tomato - Mosaic virus</option>
+                <option value="Tomato_Tomato_YellowLeaf_Curl_Virus" {% if selected_disease == "Tomato_Tomato_YellowLeaf_Curl_Virus" %}selected{% endif %}>Tomato - Yellow leaf curl virus</option>
             </select>
             <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Your question</label>
             <div class="flex flex-col sm:flex-row gap-3">

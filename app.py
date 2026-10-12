@@ -12,7 +12,10 @@ from admin.routes import admin
 from models.user import User
 from models.prediction import Prediction
 from utils.predictor import predict_leaf_disease
-from services.disease_advisor import reply_to_disease_question
+from services.disease_advisor import (
+    reply_to_disease_question,
+    resolve_disease,
+)
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -43,7 +46,8 @@ def dashboard():
 
 @app.route("/chatbot")
 def chatbot():
-    return render_template("chatbot.html")
+    selected_disease = resolve_disease(request.args.get("disease", "")) or ""
+    return render_template("chatbot.html", selected_disease=selected_disease)
 
 
 @app.route("/chatbot/reply", methods=["POST"])
