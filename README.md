@@ -8,6 +8,7 @@
 
 ### 👤 User Features
 * **AI Disease Scan:** Upload images of infected crop leaves for real-time diagnosis and confidence scoring.
+* **Plant Disease Advisor:** Ask for symptoms, treatment, and prevention guidance for the supported potato and tomato conditions.
 * **Interactive Dashboard:** View personal prediction history, diagnostic logs, and treatment recommendations.
 * **Smart Farming Tips:** Access best practices for irrigation, crop rotation, and soil management.
 * **Contact & Support Form:** Directly reach out to system administrators for assistance or feedback.
