@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Plant Disease Advisor{% endblock %}
+
+{% block content %}
+<section class="max-w-4xl mx-auto px-4 py-8">
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div class="bg-green-800 text-white p-6">
+            <h2 class="text-3xl font-bold">Plant Disease Advisor</h2>
+            <p class="mt-2 text-green-100">Ask about symptoms, treatment, or prevention for the supported potato and tomato conditions.</p>
+        </div>
+
+        <div id="chat-log" class="h-96 overflow-y-auto space-y-4 p-6" aria-live="polite">
+            <div class="max-w-3xl rounded-lg bg-green-50 p-4 text-gray-800">
+                Choose a detected condition, then ask a question. I provide practical, curated guidance for the listed conditions.
+                For a general answer, ask “How do I treat it?”
+            </div>
+        </div>
+
+        <form id="chat-form" class="border-t p-4 sm:p-6">
+            <label for="disease" class="block text-sm font-semibold text-gray-700 mb-2">Detected condition</label>
+            <select id="disease" class="w-full rounded-lg border border-gray-300 p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-green-600">
+                <option value="">Choose a condition</option>
+                <option value="Potato___Early_blight">Potato - Early blight</option>
+                <option value="Potato___healthy">Potato - Healthy</option>
+                <option value="Potato___Late_blight">Potato - Late blight</option>
+                <option value="Tomato__Target_Spot">Tomato - Target spot</option>
+                <option value="Tomato__Tomato_mosaic_virus">Tomato - Mosaic virus</option>
+                <option value="Tomato_Tomato_YellowLeaf_Curl_Virus">Tomato - Yellow leaf curl virus</option>
+            </select>
+            <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Your question</label>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input id="message" name="message" type="text" maxlength="500" required
+                       placeholder="How can I treat or prevent this?"
+                       class="min-w-0 flex-1 rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-green-600">
+                <button id="send-button" type="submit"
+                        class="rounded-lg bg-green-700 px-6 py-3 font-semibold text-white hover:bg-green-800 disabled:opacity-60">
+                    Send
+                </button>
+            </div>
+            <p id="chat-error" class="mt-3 text-sm text-red-700" role="alert"></p>
+            <p class="mt-3 text-xs text-gray-500">Guidance is educational and cannot replace a local diagnosis. Use crop-protection products only as labeled and permitted in your area.</p>
+        </form>
+    </div>
+</section>
+
+<script>
+    const chatForm = document.getElementById("chat-form");
+    const chatLog = document.getElementById("chat-log");
+    const messageInput = document.getElementById("message");
+    const diseaseSelect = document.getElementById("disease");
+    const sendButton = document.getElementById("send-button");
+    const chatError = document.getElementById("chat-error");
+
+    function addMessage(text, isUser) {
+        const message = document.createElement("div");
+        message.className = isUser
+            ? "ml-auto max-w-3xl rounded-lg bg-green-700 p-4 text-white whitespace-pre-line"
+            : "max-w-3xl rounded-lg bg-green-50 p-4 text-gray-800 whitespace-pre-line";
+        message.textContent = text;
+        chatLog.appendChild(message);
+        chatLog.scrollTop = chatLog.scrollHeight;
+    }
+
+    chatForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const message = messageInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, true);
+        messageInput.value = "";
+        chatError.textContent = "";
+        sendButton.disabled = true;
+
+        try {
+            const response = await fetch("{{ url_for('chatbot_reply') }}", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    disease: diseaseSelect.value,
+                    message: message
+                })
+            });
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || "The advisor could not process that message.");
+            }
+            addMessage(data.reply, false);
+        } catch (error) {
+            chatError.textContent = error.message || "Unable to reach the advisor. Please try again.";
+        } finally {
+            sendButton.disabled = false;
+            messageInput.focus();
+        }
+    });
+</script>
+{% endblock %}

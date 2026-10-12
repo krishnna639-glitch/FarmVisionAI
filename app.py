@@ -12,6 +12,7 @@ from admin.routes import admin
 from models.user import User
 from models.prediction import Prediction
 from utils.predictor import predict_leaf_disease
+from services.disease_advisor import reply_to_disease_question
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -38,6 +39,29 @@ def home():
 @login_required
 def dashboard():
     return render_template("dashboard.html")
+
+
+@app.route("/chatbot")
+def chatbot():
+    return render_template("chatbot.html")
+
+
+@app.route("/chatbot/reply", methods=["POST"])
+def chatbot_reply():
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict):
+        return {"error": "Send a JSON object with a message."}, 400
+
+    message = data.get("message")
+    disease = data.get("disease", "")
+    if not isinstance(message, str) or not message.strip():
+        return {"error": "Enter a question for the plant disease advisor."}, 400
+    if len(message) > 500:
+        return {"error": "Keep your question to 500 characters or fewer."}, 400
+    if not isinstance(disease, str):
+        return {"error": "Choose a valid disease."}, 400
+
+    return {"reply": reply_to_disease_question(disease, message)}
 
 
 @app.route("/predict", methods=["GET", "POST"])
